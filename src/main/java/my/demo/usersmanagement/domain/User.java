@@ -13,7 +13,8 @@ public class User {
      * Идентификатор пользователя
      */
     @Id
-    @GeneratedValue(strategy=SEQUENCE, generator="user_pk_sequence")
+    @SequenceGenerator(name = "userSequence", sequenceName = "user_pk_sequence", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy=SEQUENCE, generator="userSequence")
     @Column(name = "id", nullable = false)
     private Long id;
 

@@ -7,7 +7,7 @@ public interface UserService {
 
     UserResponseDto findUserById(Long id);
 
-    UserResponseDto findUserByLoginAndPassword(String login, String password);
+    UserResponseDto findUserByLoginAndPassword(UserRequestDto userRequestDto);
 
     UserResponseDto addUser(UserRequestDto user);
 
