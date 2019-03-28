@@ -1,7 +1,6 @@
 package my.demo.usersmanagement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import my.demo.usersmanagement.domain.User;
 import my.demo.usersmanagement.dto.UserRequestDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@Sql("classpath:test_data.sql")
 public class UserControllerTest {
 
     @Autowired

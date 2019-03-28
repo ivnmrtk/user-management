@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @Transactional
 @SpringBootTest
+@Sql("classpath:test_data.sql")
 public class UserRepositoryTest {
 
     @Autowired
@@ -47,12 +49,14 @@ public class UserRepositoryTest {
     @Test
     public void updateUserTest(){
         User user = new User();
-        user.setId(3L);
+        user.setId(1L);
         user.setLogin("updatedUser");
         user.setPassword("updPass");
         user.setBlocked(true);
+        //debug
+        userRepository.findAll().forEach(u -> System.out.println(u));
         userRepository.save(user);
-        Optional <User> persistedUserOptional = userRepository.findById(3L);
+        Optional <User> persistedUserOptional = userRepository.findById(1L);
         assertTrue(persistedUserOptional.isPresent());
         assertEquals("updatedUser", persistedUserOptional.get().getLogin());
         assertEquals("updPass", persistedUserOptional.get().getPassword());
