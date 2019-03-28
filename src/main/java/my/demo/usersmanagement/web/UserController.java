@@ -2,7 +2,6 @@ package my.demo.usersmanagement.web;
 
 import my.demo.usersmanagement.dto.UserRequestDto;
 import my.demo.usersmanagement.dto.UserResponseDto;
-import my.demo.usersmanagement.exception.NullRequestParamException;
 import my.demo.usersmanagement.exception.UserValidateException;
 import my.demo.usersmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,60 +20,48 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(path = "/getUser")
+    @GetMapping(path = "/get")
     public UserResponseDto findUserByLoginAndPassword(@ModelAttribute("user") UserRequestDto userRequestDto){
         try {
             return userService.findUserByLoginAndPassword(userRequestDto);
         }
-        catch (NullRequestParamException nullEx){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, nullEx.getMessage(), nullEx);
-        }
         catch (UserValidateException validEx){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, validEx.getMessage(), validEx);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);
         }
 
     }
 
-    @PostMapping(path = "/addUser")
+    @PostMapping(path = "/add")
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserResponseDto addUser(@RequestBody UserRequestDto userRequestDto){
         try{
             return userService.addUser(userRequestDto);
         }
-        catch (NullRequestParamException nullEx){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, nullEx.getMessage(), nullEx);
-        }
         catch (UserValidateException validEx){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, validEx.getMessage(), validEx);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);
         }
 
     }
 
-    @PutMapping(path = "/updateUser")
+    @PutMapping(path = "/update")
     @ResponseStatus(value = HttpStatus.OK)
     public UserResponseDto updateUser(@RequestParam Long userId, @RequestBody UserRequestDto userRequestDto){
         try{
             return userService.updateUser(userId, userRequestDto);
         }
-        catch (NullRequestParamException nullEx){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, nullEx.getMessage(), nullEx);
-        }
         catch (UserValidateException validEx){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, validEx.getMessage(), validEx);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);
         }
     }
 
-    @PutMapping(path = "/blockUser")
+    @PutMapping(path = "/block")
     @ResponseStatus(value = HttpStatus.OK)
     public UserResponseDto blockUser(@RequestParam Long userId){
         try{
             return userService.blockUser(userId);
         }
-        catch (NullRequestParamException nullEx){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, nullEx.getMessage(), nullEx);
-        }
         catch (UserValidateException validEx){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, validEx.getMessage(), validEx);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);
         }
     }
 }

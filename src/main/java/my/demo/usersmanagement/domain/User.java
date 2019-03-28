@@ -1,5 +1,7 @@
 package my.demo.usersmanagement.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -14,8 +16,8 @@ public class User {
      */
     @Id
     @SequenceGenerator(name = "userSequence", sequenceName = "user_pk_sequence", allocationSize = 1, initialValue = 1)
-    @GeneratedValue(strategy=SEQUENCE, generator="userSequence")
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = SEQUENCE, generator = "userSequence")
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
     /**
@@ -23,12 +25,14 @@ public class User {
      */
     @Column(name = "login", length = 20, nullable = false, unique = true)
     @NotNull(message = "Login can't be null")
+    @Length
     private String login;
 
     /**
      * Пароль пользователя
      */
     @Column(name = "password", length = 10, nullable = false, unique = true)
+    @NotNull(message = "Password can't be null")
     private String password;
 
     /**

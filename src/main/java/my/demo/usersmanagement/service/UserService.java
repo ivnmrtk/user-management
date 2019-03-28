@@ -5,8 +5,6 @@ import my.demo.usersmanagement.dto.UserResponseDto;
 
 public interface UserService {
 
-    UserResponseDto findUserById(Long id);
-
     UserResponseDto findUserByLoginAndPassword(UserRequestDto userRequestDto);
 
     UserResponseDto addUser(UserRequestDto user);

@@ -1,5 +1,10 @@
 package my.demo.usersmanagement.dto;
 
+/**
+ * dto пользователя для запроса на сервер
+ * Используется при добавлениии, редактировании
+ * и поиске по логину и паролю
+ */
 public class UserRequestDto {
 
     private String login;
