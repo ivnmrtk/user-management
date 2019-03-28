@@ -45,7 +45,6 @@ public class UserRepositoryTest {
         assertFalse(persistedUser.get().getBlocked());
     }
 
-    //FIXME crushes when running after controller test
     @Test
     public void updateUserTest(){
         User user = new User();
