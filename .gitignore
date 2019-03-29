@@ -33,3 +33,5 @@ HELP.md
 mvnw
 
 mvnw\.cmd
+
+*.log

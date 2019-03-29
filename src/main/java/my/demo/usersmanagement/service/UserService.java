@@ -11,25 +11,31 @@ public interface UserService {
     /**
      * Поиск пользователя по логину и паролю
      * @param userRequestDto объект, содержащий логин и пароль
-     * @return dto ответа искомого пользователя
+     * @return dto ответа, содержащее данные искомого пользователя
      */
     UserResponseDto findUserByLoginAndPassword(UserRequestDto userRequestDto);
 
     /**
      * Добавить пользователя
      * @param userRequestDto объект, содержащий логин и пароль
-     * @return dto ответа добавленного пользователя
+     * @return dto ответа, содержащее данные добавленного пользователя
      */
     UserResponseDto addUser(UserRequestDto userRequestDto);
 
     /**
      * Обновить информацию пользователя
      * @param userRequestDto объект, содержащий логин и пароль
-     * @return dto ответа добавленного пользователя
+     * @param userId идентификатор обновляющ
+     * @return dto ответа, содержащее данные  добавленного пользователя
      */
 
     UserResponseDto updateUser(Long userId, UserRequestDto userRequestDto);
 
-    UserResponseDto blockUser(Long id);
+    /**
+     * Сервис блокировки пользователя
+     * @param userId идентификатор блокируемого пользователя
+     * @return dro ответа, содержащее данные заблокированного пользователя
+     */
+    UserResponseDto blockUser(Long userId);
 
 }

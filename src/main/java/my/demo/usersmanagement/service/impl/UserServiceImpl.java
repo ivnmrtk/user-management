@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+/**
+ * Реализация сервиса пользователя
+ * Документацию к методам см. в {@link UserRepository}
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -44,7 +48,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto addUser(UserRequestDto userRequestDto) throws UserValidateException {
-        validateSaveUserRequestDto(userRequestDto);
+        commonUserRequestDtoValidation(userRequestDto);
+
+        if (userRepository.existsByLogin(userRequestDto.getLogin())){
+            throw new UserValidateException("User with selected login is already exists!");
+        }
 
         User userToSave = new User();
         userToSave.setLogin(userRequestDto.getLogin());
@@ -60,22 +68,32 @@ public class UserServiceImpl implements UserService {
         if (userId == null) {
             throw new UserValidateException("User identifier is empty!");
         }
-        validateSaveUserRequestDto(userRequestDto);
+        commonUserRequestDtoValidation(userRequestDto);
 
-        Optional <User> optionalUser = userRepository.findById(userId);
+        Optional <User> persistedUserById = userRepository.findById(userId);
 
-        if(optionalUser.isPresent()){
-            User userToSave = optionalUser.get();
-            userToSave.setLogin(userRequestDto.getLogin());
-            userToSave.setPassword(userRequestDto.getPassword());
-
-            log.debug("Trying to update user " + userToSave);
-
-            return formUserResponseDto(userRepository.save(userToSave));
-        }
-        else {
+        if (!persistedUserById.isPresent()){
             throw new UserValidateException("Can't find user by id = " + userId.toString());
         }
+
+        User userToSave = persistedUserById.get();
+
+        Optional <User> persistedUserByRequestedLogin = userRepository.findByLogin(userRequestDto.getLogin());
+
+        persistedUserByRequestedLogin.ifPresent(user -> {
+            if(!user.getLogin().equals(userToSave.getLogin()))
+            {
+                throw new UserValidateException("User with selected login is already exists!");
+            }
+        });
+
+
+        userToSave.setLogin(userRequestDto.getLogin());
+        userToSave.setPassword(userRequestDto.getPassword());
+
+        log.debug("Trying to update user " + userToSave);
+
+        return formUserResponseDto(userRepository.save(userToSave));
 
     }
 
@@ -88,20 +106,21 @@ public class UserServiceImpl implements UserService {
 
         Optional <User> optionalUser = userRepository.findById(userId);
 
-        if(optionalUser.isPresent()){
-            User user = optionalUser.get();
-            if (!user.getBlocked()){
-                user.setBlocked(true);
-                log.debug("Trying to block user " + user);
-                return formUserResponseDto(userRepository.save(user));
-            }
-            else {
-                throw new UserValidateException("Selected user is already blocked!");
-            }
-        }
-        else{
+        if (!optionalUser.isPresent()){
             throw new UserValidateException("Can't find user by id = " + userId.toString());
         }
+
+        User user = optionalUser.get();
+        if (!user.getBlocked()){
+            user.setBlocked(true);
+            log.debug("Trying to block user " + user);
+            return formUserResponseDto(userRepository.save(user));
+        }
+
+        else {
+            throw new UserValidateException("Selected user is already blocked!");
+        }
+
     }
 
     private UserResponseDto formUserResponseDto(User user){
@@ -112,26 +131,31 @@ public class UserServiceImpl implements UserService {
         return userResponseDto;
     }
 
-    private void validateSaveUserRequestDto(UserRequestDto userRequestDto){
+    private void commonUserRequestDtoValidation(UserRequestDto userRequestDto){
 
         if (userRequestDto.getLogin()==null || userRequestDto.getLogin().isEmpty()){
             throw new UserValidateException("Login is empty!");
         }
 
-        if(userRequestDto.getLogin().length() > 20){
-            throw new UserValidateException("Login length is more than 20 symbols!");
-        }
+        loginLengthValidation(userRequestDto.getLogin());
 
         if (userRequestDto.getPassword()==null || userRequestDto.getPassword().isEmpty()){
             throw new UserValidateException("Password is empty!");
         }
 
-        if(userRequestDto.getPassword().length() > 10){
-            throw new UserValidateException("Password length is more than 10 symbols!");
-        }
+        passwordLengthValidate(userRequestDto.getPassword());
 
-        if (userRepository.existsByLogin(userRequestDto.getLogin())){
-            throw new UserValidateException("User with selected login is already exists!");
+    }
+
+    private void loginLengthValidation(String login){
+        if (login.length() > 20) {
+            throw new UserValidateException("Login length is more than 20 symbols!");
+        }
+    }
+
+    private void passwordLengthValidate(String password){
+        if(password.length() > 10){
+            throw new UserValidateException("Password length is more than 10 symbols!");
         }
     }
 

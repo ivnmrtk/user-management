@@ -20,7 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(path = "/get")
+    @GetMapping(path = "")
     public UserResponseDto findUserByLoginAndPassword(@ModelAttribute("user") UserRequestDto userRequestDto){
         try {
             return userService.findUserByLoginAndPassword(userRequestDto);
@@ -31,7 +31,7 @@ public class UserController {
 
     }
 
-    @PostMapping(path = "/add")
+    @PostMapping(path = "")
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserResponseDto addUser(@RequestBody UserRequestDto userRequestDto){
         try{

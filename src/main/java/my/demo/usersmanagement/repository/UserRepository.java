@@ -1,6 +1,7 @@
 package my.demo.usersmanagement.repository;
 
 import my.demo.usersmanagement.domain.User;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +28,9 @@ public interface UserRepository extends CrudRepository <User, Long> {
      * @return true при наличии, иначе false
      */
     boolean existsByLogin(String login);
+
+    boolean existsByIdAndLogin(Long id, String login);
+
+    Optional <User> findByLogin(String login);
 
 }
