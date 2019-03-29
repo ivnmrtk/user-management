@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         userToSave.setLogin(userRequestDto.getLogin());
         userToSave.setPassword(userRequestDto.getPassword());
 
-        log.debug("Trying to add user " + userToSave);
+        log.info("Trying to add user " + userToSave);
 
         return formUserResponseDto(userRepository.save(userToSave));
     }
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
         userToSave.setLogin(userRequestDto.getLogin());
         userToSave.setPassword(userRequestDto.getPassword());
 
-        log.debug("Trying to update user " + userToSave);
+        log.info("Trying to update user " + userToSave);
 
         return formUserResponseDto(userRepository.save(userToSave));
 
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
         User user = optionalUser.get();
         if (!user.getBlocked()){
             user.setBlocked(true);
-            log.debug("Trying to block user " + user);
+            log.info("Trying to block user " + user);
             return formUserResponseDto(userRepository.save(user));
         }
 

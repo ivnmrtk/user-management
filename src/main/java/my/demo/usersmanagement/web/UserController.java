@@ -20,6 +20,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Найти пользователя по логину и паролю для авторизации
+     * @param userRequestDto логин и пароль искомого пользователя
+     * @return данные искомого пользователя
+     */
     @GetMapping(path = "")
     public UserResponseDto findUserByLoginAndPassword(@ModelAttribute("user") UserRequestDto userRequestDto){
         try {
@@ -28,9 +33,13 @@ public class UserController {
         catch (UserValidateException validEx){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);
         }
-
     }
 
+    /**
+     * Создать пользователя
+     * @param userRequestDto данные создаваемого пользователя (логин, пароль)
+     * @return данные созданного пользователя
+     */
     @PostMapping(path = "")
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserResponseDto addUser(@RequestBody UserRequestDto userRequestDto){
@@ -43,6 +52,12 @@ public class UserController {
 
     }
 
+    /**
+     * Обновление информации (логина или пароля) пользователя
+     * @param userId идентификатор обновляемого пользователя
+     * @param userRequestDto данные обновляемого пользователя (логин, пароль)
+     * @return данные обновленного пользователя
+     */
     @PutMapping(path = "/update")
     @ResponseStatus(value = HttpStatus.OK)
     public UserResponseDto updateUser(@RequestParam Long userId, @RequestBody UserRequestDto userRequestDto){
@@ -54,6 +69,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Заблокировать пользователя
+     * @param userId идентификатор блокируемого пользователя
+     * @return данные заблокированного пользователя
+     */
     @PutMapping(path = "/block")
     @ResponseStatus(value = HttpStatus.OK)
     public UserResponseDto blockUser(@RequestParam Long userId){
