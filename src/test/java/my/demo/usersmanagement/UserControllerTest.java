@@ -29,7 +29,7 @@ public class UserControllerTest {
 
     @Test
     public void findUserByLoginAndPassword() throws Exception {
-        mockMvc.perform(get("/user/get")
+        mockMvc.perform(get("/user")
                 .param("login", "larisa")
                 .param("password", "qwerty"))
                 .andDo(print())
@@ -48,7 +48,7 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(userRequestDto);
 
-        mockMvc.perform(post("/user/add")
+        mockMvc.perform(post("/user")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -67,7 +67,7 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(userRequestDto);
 
-        mockMvc.perform(post("/user/add")
+        mockMvc.perform(post("/user")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

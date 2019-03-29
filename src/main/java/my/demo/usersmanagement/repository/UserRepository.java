@@ -29,8 +29,11 @@ public interface UserRepository extends CrudRepository <User, Long> {
      */
     boolean existsByLogin(String login);
 
-    boolean existsByIdAndLogin(Long id, String login);
-
+    /**
+     * Найти пользователя по логину
+     * @param login логин
+     * @return искомый пользователь
+     */
     Optional <User> findByLogin(String login);
 
 }
