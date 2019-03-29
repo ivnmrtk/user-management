@@ -43,13 +43,7 @@ public class UserServiceTest {
 
         newUser = new User();
         newUser.setLogin(newUserRequestDto.getLogin());
-        newUser.setLogin(newUserRequestDto.getPassword());
-
-        User savedUser = new User();
-        savedUser.setId(2L);
-        savedUser.setLogin("newuser");
-        savedUser.setPassword("newpassw");
-        savedUser.setBlocked(false);
+        newUser.setPassword(newUserRequestDto.getPassword());
 
         User userFirst = new User();
         userFirst.setId(1L);
@@ -58,8 +52,6 @@ public class UserServiceTest {
         userFirst.setBlocked(false);
 
         when(userRepository.findByLoginAndPassword("user", "passw")).thenReturn(Optional.of(userFirst));
-
-        when(userRepository.save(newUser)).thenReturn(savedUser);
 
     }
 
@@ -85,22 +77,28 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findByLoginAndPassword("user", "passw");
     }
 
-    //FIXME
+
     @Test
-    public void addUserTest(){
+    public void saveUserTest(){
+        User savedUser = new User();
+        savedUser.setId(2L);
+        savedUser.setLogin("newuser");
+        savedUser.setPassword("newpassw");
+        savedUser.setBlocked(false);
+
+        when(userRepository.save(isA(User.class))).thenReturn(savedUser);
+
         when(userRepository.existsByLogin("newuser")).thenReturn(false);
 
         UserResponseDto userResponseDto = userService.addUser(newUserRequestDto);
 
-        verify(userRepository, times(1)).save(newUser);
+        verify(userRepository, times(1)).save(isA(User.class));
 
         assertNotNull(userResponseDto);
         assertNotNull(userResponseDto.getId());
-        assertEquals("newUser", userResponseDto.getLogin());
+        assertEquals("newuser", userResponseDto.getLogin());
         assertEquals(false, userResponseDto.getBlocked());
     }
-
-
 
 
 }

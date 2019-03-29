@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
+/**
+ * Интерфейс репозитория пользователя
+ */
 @Repository
 public interface UserRepository extends CrudRepository <User, Long> {
 

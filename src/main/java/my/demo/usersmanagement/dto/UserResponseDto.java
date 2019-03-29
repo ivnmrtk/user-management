@@ -7,10 +7,19 @@ package my.demo.usersmanagement.dto;
  */
 public class UserResponseDto {
 
+    /**
+     * Идентификатор пользователя
+     */
     private Long id;
 
+    /**
+     * Логин
+     */
     private String login;
 
+    /**
+     * Признак: пользователь заблокирован
+     */
     private Boolean blocked;
 
     public Long getId() {

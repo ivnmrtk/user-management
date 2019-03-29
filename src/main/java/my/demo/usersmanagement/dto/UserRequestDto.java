@@ -9,8 +9,14 @@ import java.util.Objects;
  */
 public class UserRequestDto {
 
+    /**
+     * Логин
+     */
     private String login;
 
+    /**
+     * Пароль
+     */
     private String password;
 
     public String getLogin() {

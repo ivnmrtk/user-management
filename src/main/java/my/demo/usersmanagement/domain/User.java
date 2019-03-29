@@ -7,6 +7,9 @@ import javax.validation.constraints.NotNull;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
+/**
+ * Основной класс пользователя
+ */
 @Entity
 @Table(name = "user")
 public class User {
