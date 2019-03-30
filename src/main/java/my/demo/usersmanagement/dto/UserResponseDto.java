@@ -1,10 +1,19 @@
 package my.demo.usersmanagement.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * dto пользователя для ответа
  * клиенту (включает в себя все данные о пользователе,
  * за исключением пароля)
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserResponseDto {
 
     /**
@@ -22,36 +31,4 @@ public class UserResponseDto {
      */
     private Boolean blocked;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public Boolean getBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(Boolean blocked) {
-        this.blocked = blocked;
-    }
-
-    @Override
-    public String toString() {
-        return "UserResponseDto{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", blocked=" + blocked +
-                '}';
-    }
 }

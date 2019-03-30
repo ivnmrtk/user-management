@@ -6,6 +6,7 @@ import my.demo.usersmanagement.dto.UserResponseDto;
 import my.demo.usersmanagement.exception.UserValidateException;
 import my.demo.usersmanagement.repository.UserRepository;
 import my.demo.usersmanagement.service.UserService;
+import my.demo.usersmanagement.util.UserToUserResponseDtoConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final UserToUserResponseDtoConverter userToUserResponseDtoConverter;
+
     private Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserToUserResponseDtoConverter userToUserResponseDtoConverter) {
         this.userRepository = userRepository;
+        this.userToUserResponseDtoConverter = userToUserResponseDtoConverter;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
 
         Optional<User> optionalUser = userRepository.findByLoginAndPassword(userRequestDto.getLogin(), userRequestDto.getPassword());
-        return optionalUser.map(this::formUserResponseDto)
+        return optionalUser.map(userToUserResponseDtoConverter::convert)
                 .orElseThrow(() -> new UserValidateException("Can't find user by selected login and password"));
     }
 
@@ -60,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
         log.info("Trying to add user " + userToSave);
 
-        return formUserResponseDto(userRepository.save(userToSave));
+        return userToUserResponseDtoConverter.convert(userRepository.save(userToSave));
     }
 
     @Override
@@ -93,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
         log.info("Trying to update user " + userToSave);
 
-        return formUserResponseDto(userRepository.save(userToSave));
+        return userToUserResponseDtoConverter.convert(userRepository.save(userToSave));
 
     }
 
@@ -114,21 +118,13 @@ public class UserServiceImpl implements UserService {
         if (!user.getBlocked()){
             user.setBlocked(true);
             log.info("Trying to block user " + user);
-            return formUserResponseDto(userRepository.save(user));
+            return userToUserResponseDtoConverter.convert(userRepository.save(user));
         }
 
         else {
             throw new UserValidateException("Selected user is already blocked!");
         }
 
-    }
-
-    private UserResponseDto formUserResponseDto(User user){
-        UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setId(user.getId());
-        userResponseDto.setLogin(user.getLogin());
-        userResponseDto.setBlocked(user.getBlocked());
-        return userResponseDto;
     }
 
     private void commonUserRequestDtoValidation(UserRequestDto userRequestDto){

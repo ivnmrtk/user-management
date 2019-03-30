@@ -1,5 +1,10 @@
 package my.demo.usersmanagement.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Objects;
 
 /**
@@ -7,6 +12,10 @@ import java.util.Objects;
  * Используется при добавлениии, редактировании
  * и поиске по логину и паролю
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserRequestDto {
 
     /**
@@ -19,41 +28,4 @@ public class UserRequestDto {
      */
     private String password;
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "UserRequestDto{" +
-                "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserRequestDto that = (UserRequestDto) o;
-        return Objects.equals(login, that.login) &&
-                Objects.equals(password, that.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(login, password);
-    }
 }

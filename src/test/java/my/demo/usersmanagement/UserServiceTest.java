@@ -7,16 +7,19 @@ import my.demo.usersmanagement.dto.UserResponseDto;
 import my.demo.usersmanagement.exception.UserValidateException;
 import my.demo.usersmanagement.repository.UserRepository;
 import my.demo.usersmanagement.service.impl.UserServiceImpl;
+import my.demo.usersmanagement.util.UserToUserResponseDtoConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
@@ -29,6 +32,9 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Spy
+    private UserToUserResponseDtoConverter userToUserResponseDtoConverter;
 
     private UserRequestDto newUserRequestDto;
 
@@ -69,6 +75,8 @@ public class UserServiceTest {
 
         UserResponseDto userResponseDto = userService.findUserByLoginAndPassword(userRequestDto);
 
+        verify(userToUserResponseDtoConverter, times(1)).convert(isA(User.class));
+
         assertNotNull(userResponseDto);
         assertEquals("user", userResponseDto.getLogin());
         assertEquals(1L, (long)userResponseDto.getId());
@@ -93,6 +101,8 @@ public class UserServiceTest {
         UserResponseDto userResponseDto = userService.addUser(newUserRequestDto);
 
         verify(userRepository, times(1)).save(isA(User.class));
+
+        verify(userToUserResponseDtoConverter, times(1)).convert(isA(User.class));
 
         assertNotNull(userResponseDto);
         assertNotNull(userResponseDto.getId());
