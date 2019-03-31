@@ -1,5 +1,6 @@
 package my.demo.usersmanagement.service;
 
+import my.demo.usersmanagement.domain.User;
 import my.demo.usersmanagement.dto.UserRequestDto;
 import my.demo.usersmanagement.dto.UserResponseDto;
 
@@ -13,14 +14,14 @@ public interface UserService {
      * @param userRequestDto объект, содержащий логин и пароль
      * @return dto ответа, содержащее данные искомого пользователя
      */
-    UserResponseDto findUserByLoginAndPassword(UserRequestDto userRequestDto);
+    User findUserByLoginAndPassword(String login, String password);
 
     /**
      * Добавить пользователя
      * @param userRequestDto объект, содержащий логин и пароль
      * @return dto ответа, содержащее данные добавленного пользователя
      */
-    UserResponseDto addUser(UserRequestDto userRequestDto);
+    User addUser(String login, String password);
 
     /**
      * Обновить информацию пользователя
@@ -29,13 +30,13 @@ public interface UserService {
      * @return dto ответа, содержащее данные  добавленного пользователя
      */
 
-    UserResponseDto updateUser(Long userId, UserRequestDto userRequestDto);
+    User updateUser(Long userId, String login, String password);
 
     /**
      * Сервис блокировки пользователя
      * @param userId идентификатор блокируемого пользователя
      * @return dro ответа, содержащее данные заблокированного пользователя
      */
-    UserResponseDto blockUser(Long userId);
+    User blockUser(Long userId);
 
 }
