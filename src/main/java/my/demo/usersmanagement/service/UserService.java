@@ -11,21 +11,24 @@ public interface UserService {
 
     /**
      * Поиск пользователя по логину и паролю
-     * @param userRequestDto объект, содержащий логин и пароль
+     * @param login логин
+     * @param password пароль
      * @return dto ответа, содержащее данные искомого пользователя
      */
     User findUserByLoginAndPassword(String login, String password);
 
     /**
      * Добавить пользователя
-     * @param userRequestDto объект, содержащий логин и пароль
+     * @param login логин
+     * @param password пароль
      * @return dto ответа, содержащее данные добавленного пользователя
      */
     User addUser(String login, String password);
 
     /**
      * Обновить информацию пользователя
-     * @param userRequestDto объект, содержащий логин и пароль
+     * @param login логин
+     * @param password пароль
      * @param userId идентификатор обновляющ
      * @return dto ответа, содержащее данные  добавленного пользователя
      */
