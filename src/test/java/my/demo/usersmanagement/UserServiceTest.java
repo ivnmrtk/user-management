@@ -3,23 +3,19 @@ package my.demo.usersmanagement;
 
 import my.demo.usersmanagement.domain.User;
 import my.demo.usersmanagement.dto.UserRequestDto;
-import my.demo.usersmanagement.dto.UserResponseDto;
 import my.demo.usersmanagement.exception.UserValidateException;
 import my.demo.usersmanagement.repository.UserRepository;
 import my.demo.usersmanagement.service.impl.UserServiceImpl;
-import my.demo.usersmanagement.util.UserToUserResponseDtoConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 

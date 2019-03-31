@@ -62,9 +62,9 @@ public class UserController {
      * @param userRequestDto данные обновляемого пользователя (логин, пароль)
      * @return данные обновленного пользователя
      */
-    @PutMapping(path = "/update")
+    @PutMapping(path = "/update/{userId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public UserResponseDto updateUser(@RequestParam Long userId, @RequestBody UserRequestDto userRequestDto){
+    public UserResponseDto updateUser(@PathVariable("userId") Long userId, @RequestBody UserRequestDto userRequestDto){
         try{
             return userToUserResponseDtoConverter.convert(userService.updateUser(userId, userRequestDto.getLogin(), userRequestDto.getPassword()));
         }
@@ -78,9 +78,9 @@ public class UserController {
      * @param userId идентификатор блокируемого пользователя
      * @return данные заблокированного пользователя
      */
-    @PutMapping(path = "/block")
+    @PutMapping(path = "/block/{userId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public UserResponseDto blockUser(@RequestParam Long userId){
+    public UserResponseDto blockUser(@PathVariable("userId") Long userId){
         try{
             return userToUserResponseDtoConverter.convert(userService.blockUser(userId));
         }
