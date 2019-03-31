@@ -84,8 +84,7 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(userRequestDto);
 
-        mockMvc.perform(put("/user/update")
-                .param("userId", "2")
+        mockMvc.perform(put("/user/update/2")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -101,8 +100,7 @@ public class UserControllerTest {
     public void blockUser() throws Exception {
 
 
-        mockMvc.perform(put("/user/block")
-                .param("userId", "3")
+        mockMvc.perform(put("/user/block/3")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
