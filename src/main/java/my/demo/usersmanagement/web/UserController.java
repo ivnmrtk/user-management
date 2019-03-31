@@ -4,6 +4,7 @@ import my.demo.usersmanagement.dto.UserRequestDto;
 import my.demo.usersmanagement.dto.UserResponseDto;
 import my.demo.usersmanagement.exception.UserValidateException;
 import my.demo.usersmanagement.service.UserService;
+import my.demo.usersmanagement.util.UserToUserResponseDtoConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,12 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserToUserResponseDtoConverter userToUserResponseDtoConverter;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserToUserResponseDtoConverter userToUserResponseDtoConverter) {
         this.userService = userService;
+        this.userToUserResponseDtoConverter = userToUserResponseDtoConverter;
     }
 
     /**
@@ -28,7 +32,7 @@ public class UserController {
     @GetMapping(path = "")
     public UserResponseDto findUserByLoginAndPassword(@ModelAttribute("user") UserRequestDto userRequestDto){
         try {
-            return userService.findUserByLoginAndPassword(userRequestDto);
+            return userToUserResponseDtoConverter.convert(userService.findUserByLoginAndPassword(userRequestDto.getLogin(), userRequestDto.getPassword()));
         }
         catch (UserValidateException validEx){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);
@@ -44,7 +48,7 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserResponseDto addUser(@RequestBody UserRequestDto userRequestDto){
         try{
-            return userService.addUser(userRequestDto);
+            return userToUserResponseDtoConverter.convert(userService.addUser(userRequestDto.getLogin(), userRequestDto.getPassword()));
         }
         catch (UserValidateException validEx){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);
@@ -62,7 +66,7 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.OK)
     public UserResponseDto updateUser(@RequestParam Long userId, @RequestBody UserRequestDto userRequestDto){
         try{
-            return userService.updateUser(userId, userRequestDto);
+            return userToUserResponseDtoConverter.convert(userService.updateUser(userId, userRequestDto.getLogin(), userRequestDto.getPassword()));
         }
         catch (UserValidateException validEx){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);
@@ -78,7 +82,7 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.OK)
     public UserResponseDto blockUser(@RequestParam Long userId){
         try{
-            return userService.blockUser(userId);
+            return userToUserResponseDtoConverter.convert(userService.blockUser(userId));
         }
         catch (UserValidateException validEx){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validEx.getMessage(), validEx);

@@ -7,16 +7,19 @@ import my.demo.usersmanagement.dto.UserResponseDto;
 import my.demo.usersmanagement.exception.UserValidateException;
 import my.demo.usersmanagement.repository.UserRepository;
 import my.demo.usersmanagement.service.impl.UserServiceImpl;
+import my.demo.usersmanagement.util.UserToUserResponseDtoConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
@@ -30,20 +33,18 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    private UserRequestDto newUserRequestDto;
-
-    private User newUser;
-
     @Before
     public void setUp(){
 
-        newUserRequestDto = new UserRequestDto();
-        newUserRequestDto.setLogin("newuser");
-        newUserRequestDto.setPassword("newpassw");
+    }
 
-        newUser = new User();
-        newUser.setLogin(newUserRequestDto.getLogin());
-        newUser.setPassword(newUserRequestDto.getPassword());
+    @Test(expected = UserValidateException.class)
+    public void findByEmptyLoginTestNegative(){
+        userService.findUserByLoginAndPassword(" ", "pass");
+    }
+
+    @Test
+    public void findByLoginAndPasswordTest(){
 
         User userFirst = new User();
         userFirst.setId(1L);
@@ -53,26 +54,16 @@ public class UserServiceTest {
 
         when(userRepository.findByLoginAndPassword("user", "passw")).thenReturn(Optional.of(userFirst));
 
-    }
-
-    @Test(expected = UserValidateException.class)
-    public void findByEmptyLoginTestNegative(){
-        userService.findUserByLoginAndPassword(new UserRequestDto());
-    }
-
-    @Test
-    public void findByEmptyLoginTest(){
-
         UserRequestDto userRequestDto = new UserRequestDto();
         userRequestDto.setLogin("user");
         userRequestDto.setPassword("passw");
 
-        UserResponseDto userResponseDto = userService.findUserByLoginAndPassword(userRequestDto);
+        User foundUser = userService.findUserByLoginAndPassword("user", "passw");
 
-        assertNotNull(userResponseDto);
-        assertEquals("user", userResponseDto.getLogin());
-        assertEquals(1L, (long)userResponseDto.getId());
-        assertEquals(false, userResponseDto.getBlocked());
+        assertNotNull(foundUser);
+        assertEquals("user", foundUser.getLogin());
+        assertEquals(1L, (long)foundUser.getId());
+        assertEquals(false, foundUser.getBlocked());
 
         verify(userRepository, times(1)).findByLoginAndPassword("user", "passw");
     }
@@ -80,24 +71,30 @@ public class UserServiceTest {
 
     @Test
     public void saveUserTest(){
-        User savedUser = new User();
-        savedUser.setId(2L);
-        savedUser.setLogin("newuser");
-        savedUser.setPassword("newpassw");
-        savedUser.setBlocked(false);
 
-        when(userRepository.save(isA(User.class))).thenReturn(savedUser);
+        UserRequestDto newUserRequestDto = new UserRequestDto();
+        newUserRequestDto.setLogin("newuser");
+        newUserRequestDto.setPassword("newpassw");
+
+
+        User savedUserForMocking = new User();
+        savedUserForMocking.setId(2L);
+        savedUserForMocking.setLogin("newuser");
+        savedUserForMocking.setPassword("newpassw");
+        savedUserForMocking.setBlocked(false);
+
+        when(userRepository.save(isA(User.class))).thenReturn(savedUserForMocking);
 
         when(userRepository.existsByLogin("newuser")).thenReturn(false);
 
-        UserResponseDto userResponseDto = userService.addUser(newUserRequestDto);
+        User returnedSavedUser = userService.addUser("newuser", "newpassw");
 
         verify(userRepository, times(1)).save(isA(User.class));
 
-        assertNotNull(userResponseDto);
-        assertNotNull(userResponseDto.getId());
-        assertEquals("newuser", userResponseDto.getLogin());
-        assertEquals(false, userResponseDto.getBlocked());
+        assertNotNull(returnedSavedUser);
+        assertNotNull(returnedSavedUser.getId());
+        assertEquals("newuser", returnedSavedUser.getLogin());
+        assertEquals(false, returnedSavedUser.getBlocked());
     }
 
 
